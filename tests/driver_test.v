@@ -1,7 +1,3 @@
-// Jacob Panov
-// Testbench for the driver module.
-// driver_test.v
-
 module driver_test;
 
   localparam WIDTH=8;
@@ -10,6 +6,7 @@ module driver_test;
   reg  [WIDTH-1:0] data_in  ;
   wire [WIDTH-1:0] data_out ;
 
+  // instantiate the driver module
   driver
   #(
     .WIDTH ( WIDTH )
@@ -21,6 +18,7 @@ module driver_test;
     .data_out ( data_out ) 
    );
 
+  // task to check expected values
   task expect;
     input [WIDTH-1:0] exp_out;
     if (data_out !== exp_out) begin
@@ -36,6 +34,7 @@ module driver_test;
     end
   endtask
 
+  // initial block to run test cases
   initial begin
     data_en=1'b0; data_in=8'hXX; #1 expect (8'hZZ);
     data_en=1'b1; data_in=8'h55; #1 expect (8'h55);

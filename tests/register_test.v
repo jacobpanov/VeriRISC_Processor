@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC register testbench
-// register_test.v
-
 module register_test;
 
   localparam WIDTH=8;
@@ -12,6 +8,7 @@ module register_test;
   reg  [WIDTH-1:0] data_in;
   wire [WIDTH-1:0] data_out;
 
+  // instantiate the register module
   register
   #(
     .WIDTH ( WIDTH )
@@ -25,6 +22,7 @@ module register_test;
     .data_out ( data_out ) 
    );
 
+  // task to check expected values
   task expect;
     input [WIDTH-1:0] exp_out;
     if (data_out !== exp_out) begin
@@ -40,8 +38,10 @@ module register_test;
    end
   endtask
 
+  // initial block to run test cases
   initial repeat (5) begin #5 clk=1; #5 clk=0; end
 
+  // initial block to apply test cases
   initial @(negedge clk) begin
     rst=0; load=1; data_in=8'h55; @(negedge clk) expect (8'h55);
     rst=0; load=1; data_in=8'hAA; @(negedge clk) expect (8'hAA);

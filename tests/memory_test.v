@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC Memory testbench
-// memory_test.v
-
 module memory_test;
 
   localparam integer AWIDTH=5;
@@ -16,6 +12,7 @@ module memory_test;
 
   assign data=rdata;
 
+  // instantiate the memory module
   memory
   #(
     .AWIDTH ( AWIDTH ),
@@ -30,6 +27,7 @@ module memory_test;
     .data ( data ) 
    );
 
+  // task to check expected values
   task expect;
     input [DWIDTH-1:0] exp_data;
     if (data !== exp_data) begin
@@ -44,6 +42,7 @@ module memory_test;
    end
   endtask
 
+  // task to write data to memory
 	task write;
 		input [AWIDTH-1:0] addr;
 		input [DWIDTH-1:0] data;
@@ -56,6 +55,7 @@ module memory_test;
 		end
 	endtask
 
+  // task to read data from memory
 	task read;
 		input [AWIDTH-1:0] addr;
 		input [DWIDTH-1:0] data;
@@ -68,7 +68,7 @@ module memory_test;
 		end
 	endtask
 
-  
+  // initial block to run test cases
   initial repeat (67) begin #5 clk=1; #5 clk=0; end
 
   initial @(negedge clk) begin : TEST

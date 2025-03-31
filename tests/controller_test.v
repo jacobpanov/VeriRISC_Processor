@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC controller testbench
-// controller_test.v
-
 module controller_test;
 
   localparam integer HLT=0, SKZ=1, ADD=2, AND=3, XOR=4, LDA=5, STO=6, JMP=7;
@@ -19,6 +15,7 @@ module controller_test;
   wire       ld_ac  ; // load accumulator from data bus
   wire       wr     ; // write data bus to memory
 
+  // instantiate the controller module
   controller controller_inst
   (
     .opcode ( opcode ),
@@ -35,6 +32,7 @@ module controller_test;
     .wr     ( wr     ) 
   );
 
+  // task to check expected values
   task expect;
     input [8:0] exp_out;
     if ({sel,rd,ld_ir,inc_pc,halt,ld_pc,data_e,ld_ac,wr} !== exp_out) begin
@@ -50,6 +48,7 @@ module controller_test;
     end
   endtask
 
+  // initial block to run test cases
   initial begin
 
     zero=0;

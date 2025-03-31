@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC CPU Testbench
-// cpu_test.v
-
 module test;
 
   // nets and variables

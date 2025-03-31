@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC ALU testbench
-// alu_test.v
-
 module alu_test;
 
   localparam WIDTH=8;
@@ -14,7 +10,7 @@ module alu_test;
   wire             a_is_zero ;
   wire [WIDTH-1:0] alu_out   ;
 
-
+  // instantiate the alu module
   alu
   #(
     .WIDTH ( WIDTH )
@@ -28,6 +24,7 @@ module alu_test;
     .alu_out   ( alu_out   ) 
    );
 
+  // task to check expected values
   task expect;
     input             exp_zero;
     input [WIDTH-1:0] exp_out;
@@ -47,6 +44,7 @@ module alu_test;
    end
   endtask
 
+  // initial block to run test cases
   initial begin
     opcode=PASS0; in_a=8'h42; in_b=8'h86; #1 expect (1'b0, 8'h42);
     opcode=PASS1; in_a=8'h42; in_b=8'h86; #1 expect (1'b0, 8'h42);
@@ -60,6 +58,5 @@ module alu_test;
     $display("TEST PASSED");
     $finish;
   end
-
 
 endmodule

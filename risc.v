@@ -1,16 +1,12 @@
-// Jacob Panov
-// VeriRISC RISC Processor
-// risc.v
-
 module risc
 (
-  input  wire clk,
-  input  wire rst,
-  output wire halt
+  input  wire clk, // clock signal
+  input  wire rst, // reset signal
+  output wire halt // halt signal
 );
 
+  // local parameter definitions
   localparam integer AWIDTH=5, DWIDTH=8 ;
-
 
   /////////////////////
   // CLOCK GENERATOR //
@@ -18,6 +14,7 @@ module risc
 
   wire [2:0] phase ;
 
+  // instantiation of counter module for clock generation
   counter
   #(
     .WIDTH   ( 3  ) 
@@ -32,13 +29,13 @@ module risc
     .cnt_out ( phase ) 
    ) ;
 
-
   ////////////////
   // CONTROLLER //
   ////////////////
 
   wire [2:0] opcode ;
 
+  // instantiation of controller module
   controller controller_inst
   (
     .opcode  ( opcode ), // operation code
@@ -55,13 +52,13 @@ module risc
     .wr      ( wr     )  // write data bus to memory
   ) ;
 
-
   /////////////////////
   // PROGRAM COUNTER //
   /////////////////////
 
   wire [AWIDTH-1:0] ir_addr, pc_addr ;
 
+  // instantiation of counter module for program counter
   counter
   #(
     .WIDTH   ( AWIDTH  ) 
@@ -76,13 +73,13 @@ module risc
     .cnt_out ( pc_addr ) 
    ) ;
 
-
   /////////////////////
   // ADDESS SELECTOR //
   /////////////////////
 
   wire [AWIDTH-1:0] addr ;
 
+  // instantiation of multiplexor module for address selection
   multiplexor
   #(
     .WIDTH   ( AWIDTH  ) 
@@ -95,13 +92,13 @@ module risc
     .mux_out ( addr    ) 
    ) ;
 
-
   /////////////////////////
   // DATA/PROGRAM MEMORY //
   /////////////////////////
 
   wire [DWIDTH-1:0] data ;
 
+  // instantiation of memory module
   memory
   #(
     .AWIDTH ( AWIDTH ),
@@ -116,11 +113,11 @@ module risc
     .data   ( data   ) 
    ) ;
 
-
   //////////////////////////
   // INSTRUCTION REGISTER //
   //////////////////////////
 
+  // instantiation of register module for instruction register
   register
   #(
     .WIDTH    ( DWIDTH ) 
@@ -134,13 +131,13 @@ module risc
     .data_out ( {opcode,ir_addr} )
    ) ;
 
-
   ////////////////////////
   // ARITHMETIC & LOGIC //
   ////////////////////////
 
   wire [DWIDTH-1:0] acc_out, alu_out ;
 
+  // instantiation of alu module
   alu
   #(
     .WIDTH     ( DWIDTH ) 
@@ -154,11 +151,11 @@ module risc
     .alu_out   ( alu_out ) 
    ) ;
 
-
   //////////////////////////
   // ACCUMULATOR REGISTER //
   //////////////////////////
 
+  // instantiation of register module for accumulator register
   register
   #(
     .WIDTH    ( DWIDTH  ) 
@@ -172,11 +169,11 @@ module risc
     .data_out ( acc_out ) 
    ) ;
 
-
   //////////////////////////
   // BUS DRIVER           //
   //////////////////////////
 
+  // instantiation of driver module
   driver
   #(
     .WIDTH    ( DWIDTH  ) 

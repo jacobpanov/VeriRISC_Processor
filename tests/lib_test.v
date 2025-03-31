@@ -1,29 +1,11 @@
-// Jacob Panov
-// VeriRISC test library
-// lib_test.v
-
-////////////////////////////////////////////////////////////////////////////////
-// this tests all units if none are specified                                 //
-////////////////////////////////////////////////////////////////////////////////
-`ifndef priority7
- `ifndef latchrs
-  `ifndef dffrs
-   `ifndef drive8
-    `define priority7
-    `define latchrs
-    `define dffrs
-    `define drive8
-   `endif
-  `endif
- `endif
-`endif
-
 module lib_test;
 
 `ifdef priority7
   wire [2:0] py ;
   reg  [7:1] pa ;
   priority7 priority7_i ( py, pa ) ;
+  
+  // task to check expected values
   task p_expect ( input [2:0] xy ) ;
     if (py !== xy) begin
         $display("TEST FAILED - PRIORITY");
@@ -32,6 +14,8 @@ module lib_test;
         $finish;
       end
   endtask
+  
+  // initial block to run test cases
   initial begin
       pa = 7'bxxxxxx1; #1 p_expect ( 1 );
       pa = 7'bxxxxx10; #1 p_expect ( 2 );
@@ -48,6 +32,8 @@ module lib_test;
   wire lq ;
   reg  le, ld, lr, ls ;
   latchrs latchrs_i ( lq, le, ld, lr, ls ) ;
+  
+  // task to check expected values
   task l_expect ( input xq ) ;
     if (lq !== xq) begin
         $display("TEST FAILED - LATCH");
@@ -57,6 +43,8 @@ module lib_test;
         $finish;
       end
   endtask
+  
+  // initial block to run test cases
   initial begin
       {le, ld, lr, ls} = 4'b0000; #1 l_expect ( 1 ) ;
       {le, ld, lr, ls} = 4'b0001; #1 l_expect ( 0 ) ;
@@ -74,6 +62,8 @@ module lib_test;
   wire fq ;
   reg  fc, fd, fe, fr, fs ;
   dffrs dffrs_i (fq, fc, fd, fe, fr, fs) ;
+  
+  // task to check expected values
   task f_expect ( input xq ) ;
     if (fq !== xq) begin
         $display("TEST FAILED - DFF");
@@ -83,6 +73,8 @@ module lib_test;
         $finish;
       end
   endtask
+  
+  // initial block to run test cases
   initial repeat (9) begin fc = 1; #1; fc = 0; #1; end
   initial @(negedge fc) begin
       {fe, fd, fr, fs} = 4'b0000; @(negedge fc) f_expect ( 1 ) ;
@@ -102,6 +94,8 @@ module lib_test;
   reg  [7:0] da ;
   reg        de ;
   drive8 drive8_i ( dy, da, de ) ;
+  
+  // task to check expected values
   task d_expect ( input [7:0] xy ) ;
     if (dy !== xy) begin
         $display("TEST FAILED - DRIVER");
@@ -110,6 +104,8 @@ module lib_test;
         $finish;
       end
   endtask
+  
+  // initial block to run test cases
   initial begin
       {de, da} = 9'h0_xx; #1 d_expect (8'hzz) ;
       {de, da} = 9'h1_55; #1 d_expect (8'h55) ;

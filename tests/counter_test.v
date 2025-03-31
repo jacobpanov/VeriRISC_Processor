@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC counter testbench
-// counter_test.v
-
 module counter_test;
 
   localparam WIDTH=5;
@@ -13,6 +9,7 @@ module counter_test;
   reg  [WIDTH-1:0] cnt_in;
   wire [WIDTH-1:0] cnt_out;
 
+  // instantiate the counter module
   counter
   #(
     .WIDTH ( WIDTH )
@@ -27,6 +24,7 @@ module counter_test;
     .cnt_out  ( cnt_out ) 
    );
 
+  // task to check expected values
   task expect;
     input [WIDTH-1:0] exp_out;
     if (cnt_out !== exp_out) begin
@@ -42,6 +40,7 @@ module counter_test;
     end
   endtask
 
+  // initial block to run test cases
   initial repeat (7) begin #5 clk=1; #5 clk=0; end
 
   initial @(negedge clk) begin

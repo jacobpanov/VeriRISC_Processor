@@ -1,7 +1,3 @@
-// Jacob Panov
-// VeriRISC Receiver Testbench
-// rcv_test.v
-
 module rcvr_test;
 
   localparam [1:14*8] message_send = "I Love Verilog" ;
@@ -15,11 +11,14 @@ module rcvr_test;
   wire       overrun  ;
   wire [7:0] data_out ;
 
+  // instantiate the rcvr module
   rcvr rcvr_i (clock, reset, data_in, reading, ready, overrun, data_out);
 
+  // display message when data out buffer is overrun
   initial forever @(posedge overrun)
     $display("At time %0d: Data out buffer is overrun", $time);
 
+  // generate clock signal
   initial begin
       repeat (300) begin
           clock=1; #1;
@@ -29,6 +28,7 @@ module rcvr_test;
       $finish;
     end
 
+  // send message
   initial begin : XMT
       reg [1:8] body;
       integer i, j, seed;
@@ -46,6 +46,7 @@ module rcvr_test;
         end
     end
 
+  // receive message
   initial begin : RCV
       reg [1:14*8] message_rcvd;
       integer i, seed;
